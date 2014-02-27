@@ -36,10 +36,12 @@ end
 
 group :development do
     gem 'rspec-rails'
+    gem "webrat"
 end
 
 group :test do 
     gem 'rspec'
+    gem "webrat"
 end
 
 gem 'rails_12factor', group: :production
