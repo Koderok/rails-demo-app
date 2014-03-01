@@ -1,0 +1,6 @@
+# Logfile created on 2014-03-01 12:47:08 +0530 by logger.rb/41954
+D, [2014-03-01T12:47:08.684447 #18232] DEBUG -- : REQUESTING PAGE: GET /help with {} and HTTP headers {}
+D, [2014-03-01T12:47:43.188868 #20862] DEBUG -- : REQUESTING PAGE: GET /help with {} and HTTP headers {}
+D, [2014-03-01T12:47:43.235262 #20862] DEBUG -- : REQUESTING PAGE: GET /contact with {} and HTTP headers {}
+D, [2014-03-01T12:47:43.256490 #20862] DEBUG -- : REQUESTING PAGE: GET / with {} and HTTP headers {}
+D, [2014-03-01T12:47:43.283457 #20862] DEBUG -- : REQUESTING PAGE: GET /about with {} and HTTP headers {}
