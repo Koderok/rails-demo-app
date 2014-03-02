@@ -11,8 +11,6 @@ Myapp::Application.routes.draw do
   # get "pages/contact"
   # get "pages/about"
   # get "pages/help"
-
-  resources :microposts
   # root 'welcome#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
