@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   def new
     @title = "Sign Up"
+    @msg = "Initial message!"
   end
 
   def create
@@ -12,6 +13,10 @@ class UsersController < ApplicationController
       #   render 'new'
       # end
     end
+
+  def show 
+    @user = User.find(params[:id])
+end
 
   private   
 
