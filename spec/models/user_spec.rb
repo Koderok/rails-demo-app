@@ -2,11 +2,12 @@
 #
 # Table name: users
 #
-#  id         :integer          not null, primary key
-#  name       :string(255)
-#  email      :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  id              :integer          not null, primary key
+#  name            :string(255)
+#  email           :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  password_digest :string(255)
 #
 
 require 'spec_helper'
@@ -14,11 +15,32 @@ require 'spec_helper'
 describe User do
 
   before(:each)  do
-    @attr = {:name => "Example User", :email => "user@example.com"}
+    @attr = {
+      :name => "Example User", 
+      :email => "user@example.com",
+      :password => "foobar",
+      :password_confirmation => "foobar"
+    }
+  end
+
+  it "should respond to name" do
+    user = User.new(@attr)
+    user.should respond_to(:name)
+  end
+
+
+  it "should respond to email" do
+    user = User.new(@attr)
+    user.should respond_to(:email)
+  end
+
+  it "should respond to :authenticate" do
+    user = User.new(@attr)
+    user.should respond_to(:authenticate)
   end
 
   it "should create a new instance given a valid attribute" do
-    User.create!(:name => "Example User", :email => "user@example.com")
+    User.create!(@attr)
   end
 
   it "should require a name" do
@@ -65,4 +87,71 @@ describe User do
       user_with_duplicate_email = User.new(@attr)
       user_with_duplicate_email.should_not be_valid
   end 
+
+  describe "passwords" do
+
+    before(:each) do
+      @user = User.new(@attr)
+    end
+
+    it "should have a password_digest" do
+      User.new(@attr).should respond_to(:password_digest)
+    end
+
+    it "should have a password" do
+      User.new(@attr).should respond_to(:password)
+    end
+
+    it "should have a password confirmation attribute" do
+      User.new(@attr).should respond_to(:password_confirmation)
+    end
+  end
+
+
+  describe "password validation" do
+    
+    it "should require a password" do
+      User.new(@attr.merge(:password => "", :password_confirmation => "")).
+          should_not be_valid
+    end
+
+    it "should require a matching password confirmation" do
+      User.new(@attr.merge(:password_confirmation => "invalid")).
+          should_not be_valid
+    end
+
+    it "should reject short passwords" do
+      short = "a" * 5
+      hash = @attr.merge(:password => short, :password_confirmation => short)
+      User.new(hash).should_not be_valid
+    end
+
+    it "should reject long passwords" do
+      long = "a" * 41
+      hash = @attr.merge(:password => long, :password_confirmation => long)
+      User.new(hash).should_not be_valid
+    end
+  end
+
+  # describe "with a password that's too short" do
+  #     before { @user.password = @user.password_confirmation = "a" * 5 }
+  #     it { should be_invalid }
+  #   end
+
+  #   describe "return value of authenticate method" do
+  #     before { @user.save }
+  #     let(:found_user) { User.find_by(email: @user.email) }
+
+  #     describe "with valid password" do
+  #       it { should eq found_user.authenticate(@user.password) }
+  #     end
+
+  #     describe "with invalid password" do
+  #       let(:user_for_invalid_password) { found_user.authenticate("invalid") }
+
+  #       it { should_not eq user_for_invalid_password }
+  #       specify { expect(user_for_invalid_password).to be_false }
+  #     end
+  #   end
+
 end
