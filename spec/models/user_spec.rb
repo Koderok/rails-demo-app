@@ -95,21 +95,24 @@ describe User do
     end
 
     it "should have a password_digest" do
-      User.new(@attr).should respond_to(:password_digest)
+      @user.should respond_to(:password_digest)
     end
 
     it "should have a password" do
-      User.new(@attr).should respond_to(:password)
+      @user.should respond_to(:password)
     end
 
     it "should have a password confirmation attribute" do
-      User.new(@attr).should respond_to(:password_confirmation)
+      @user.should respond_to(:password_confirmation)
     end
   end
 
 
   describe "password validation" do
-    
+    before(:each) do
+      @user = User.new(@attr)
+    end
+
     it "should require a password" do
       User.new(@attr.merge(:password => "", :password_confirmation => "")).
           should_not be_valid
@@ -121,37 +124,37 @@ describe User do
     end
 
     it "should reject short passwords" do
-      short = "a" * 5
-      hash = @attr.merge(:password => short, :password_confirmation => short)
-      User.new(hash).should_not be_valid
+      @user.password = @user.password_confirmation = "a" * 5
+      @user.should_not be_valid
     end
 
     it "should reject long passwords" do
-      long = "a" * 41
-      hash = @attr.merge(:password => long, :password_confirmation => long)
-      User.new(hash).should_not be_valid
+      @user.password = @user.password_confirmation = "a" * 41
+      @user.should_not be_valid
     end
   end
 
-  # describe "with a password that's too short" do
-  #     before { @user.password = @user.password_confirmation = "a" * 5 }
-  #     it { should be_invalid }
-  #   end
+  before do
+      @user = User.new(name: "Example User", email: "user@example.com",
+                       password: "foobar", password_confirmation: "foobar")
+  end
 
-  #   describe "return value of authenticate method" do
-  #     before { @user.save }
-  #     let(:found_user) { User.find_by(email: @user.email) }
+  subject { @user }
 
-  #     describe "with valid password" do
-  #       it { should eq found_user.authenticate(@user.password) }
-  #     end
+  describe "return value of authenticate method" do
+    before { @user.save }
+    let(:found_user) { User.find_by(email: @user.email) }
 
-  #     describe "with invalid password" do
-  #       let(:user_for_invalid_password) { found_user.authenticate("invalid") }
+    describe "with valid password" do
+      it { should eq found_user.authenticate(@user.password) }
+    end
 
-  #       it { should_not eq user_for_invalid_password }
-  #       specify { expect(user_for_invalid_password).to be_false }
-  #     end
-  #   end
+    describe "with invalid password" do
+      let(:user_for_invalid_password) { found_user.authenticate("invalid") }
+
+      it { should_not eq user_for_invalid_password }
+      specify { expect(user_for_invalid_password).to be_false }
+    end
+  end
 
 end
