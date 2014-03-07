@@ -7,6 +7,8 @@ gem 'bcrypt-ruby', '3.1.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.3'
 
+gem 'bootstrap-sass', '2.3.2.0'
+
 # Use postgresql as the database for Active Record
 gem 'pg'
 
@@ -44,7 +46,9 @@ end
 
 group :test do 
     gem 'rspec'
-    gem 'factory_girl_rails'
+    gem 'factory_girl_rails', '4.2.1'
+    gem 'selenium-webdriver', '2.35.1'
+    gem 'capybara', '2.1.0'
 end
 
 gem 'rails_12factor', group: :production
