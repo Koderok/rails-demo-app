@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   # attr_accessible :name, :email, :password, :password_confirmation
 
   before_save { self.email = email.downcase }
+  before_create :create_remember_token    # before signup, fill remember_token in db
 
   has_secure_password
 
@@ -26,6 +27,19 @@ class User < ActiveRecord::Base
                     :format     => { :with => email_regex },
                     :uniqueness => { :case_sensitive => false }
   validates :password, length: { :within => 6..40 }                    
-  # validates :password, :presence => true,
-  #                      :confirmation => true                    
+
+  def User.new_remember_token
+    SecureRandom.urlsafe_base64
+  end
+
+  def User.hash(token)
+    Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  private
+
+    def create_remember_token
+      self.remember_token = User.hash(User.new_remember_token)
+    end
+
 end
